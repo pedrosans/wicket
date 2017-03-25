@@ -27,6 +27,12 @@ import org.apache.wicket.core.util.reflection.ObjectWithGetAndSet;
 public class ParsedPropertyExpressionResolver implements IPropertyExpressionResolver
 {
 	@Override
+	public void validate(String expression)
+	{
+		new PropertyExpressionParser().parse(expression);
+	}
+
+	@Override
 	public ObjectWithGetAndSet resolve(String expression, Object object,
 		Class<? extends Object> clz, int tryToCreateNull)
 	{

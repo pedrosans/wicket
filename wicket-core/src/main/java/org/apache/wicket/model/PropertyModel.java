@@ -16,6 +16,7 @@
  */
 package org.apache.wicket.model;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.core.util.lang.PropertyResolver;
 
 /**
@@ -100,6 +101,7 @@ public class PropertyModel<T> extends AbstractPropertyModel<T>
 	public PropertyModel(final Object modelObject, final String expression)
 	{
 		super(modelObject);
+		Application.get().getApplicationSettings().getPropertyExpressionResolver().validate(expression);
 		this.expression = expression;
 	}
 

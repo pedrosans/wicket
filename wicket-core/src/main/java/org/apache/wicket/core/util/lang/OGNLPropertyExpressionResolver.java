@@ -87,6 +87,12 @@ public class OGNLPropertyExpressionResolver implements IPropertyExpressionResolv
 	}
 
 	@Override
+	public void validate(String expression)
+	{
+		
+	}
+
+	@Override
 	public ObjectWithGetAndSet resolve(String expression, Object object, Class<? extends Object> clz, int tryToCreateNull)
 	{
 		ObjectWithGetAndSet objectWithGetAndSet = getObjectWithGetAndSet(expression, object,

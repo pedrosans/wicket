@@ -14,6 +14,8 @@ public interface IPropertyExpressionResolver
 	int CREATE_NEW_VALUE = 1;
 	int RESOLVE_CLASS = 2;
 
+	void validate(String expression);
+
 	/**
 	 * @param expression
 	 * @param object
