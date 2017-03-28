@@ -17,6 +17,9 @@
 package org.apache.wicket.model;
 
 
+import java.io.Serializable;
+
+import org.apache.wicket.util.io.IClusterable;
 import org.apache.wicket.util.lang.Args;
 import org.danekja.java.util.function.serializable.SerializableBiFunction;
 import org.danekja.java.util.function.serializable.SerializableFunction;
@@ -61,7 +64,7 @@ import org.danekja.java.util.function.serializable.SerializableSupplier;
  *            Model object.
  */
 @FunctionalInterface
-public interface IModel<T> extends IDetachable
+public interface IModel<T> extends IClusterable
 {
 	/**
 	 * Gets the model object.
@@ -82,11 +85,6 @@ public interface IModel<T> extends IDetachable
 	{
 		throw new UnsupportedOperationException(
 			"Override this method to support setObject(Object)");
-	}
-
-	@Override
-	default void detach()
-	{
 	}
 
 	/**
@@ -183,7 +181,7 @@ public interface IModel<T> extends IDetachable
 	default <R> IModel<R> flatMap(SerializableFunction<? super T, IModel<R>> mapper)
 	{
 		Args.notNull(mapper, "mapper");
-		return new IModel<R>()
+		return new IWrapModel<R>()
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -222,7 +220,18 @@ public interface IModel<T> extends IDetachable
 					}
 				}
 			}
-
+			public IModel<R> getWrappedModel() {
+				
+				T object = IModel.this.getObject();
+				if (object != null)
+				{
+					return mapper.apply(object);
+				}	
+				else 
+				{
+					return null;
+				}
+			}
 			@Override
 			public void detach()
 			{
@@ -230,9 +239,9 @@ public interface IModel<T> extends IDetachable
 				if (object != null)
 				{
 					IModel<R> model = mapper.apply(object);
-					if (model != null)
+					if (model instanceof IDetachable)
 					{
-						model.detach();
+						((IDetachable)model).detach();
 					}
 				}
 			}

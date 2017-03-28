@@ -24,6 +24,7 @@ import org.apache.wicket.devutils.diskstore.DebugDiskDataStore;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.pageStore.PageWindowManager.PageWindow;
@@ -92,7 +93,8 @@ class PageWindowProvider implements ISortableDataProvider<PageWindowDescription,
 	@Override
 	public void detach()
 	{
-		sessionId.detach();
+		if(sessionId instanceof IDetachable)
+			((IDetachable)sessionId).detach();
 	}
 
 	/*

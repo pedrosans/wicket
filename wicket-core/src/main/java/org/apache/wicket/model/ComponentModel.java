@@ -113,7 +113,10 @@ public class ComponentModel<T> implements IModel<T>, IComponentAssignedModel<T>
 		@Override
 		public void detach()
 		{
-			ComponentModel.this.detach();
+			if(ComponentModel.this instanceof IDetachable)
+			{
+				((IDetachable)ComponentModel.this).detach();
+			}
 		}
 	}
 }

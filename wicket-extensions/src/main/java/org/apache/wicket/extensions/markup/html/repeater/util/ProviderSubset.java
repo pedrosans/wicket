@@ -24,6 +24,7 @@ import java.util.Set;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * A {@link Set} implementation utilizing a {@link ITreeProvider}'s models to keep containing
@@ -82,7 +83,10 @@ public class ProviderSubset<T> implements Set<T>, IDetachable
 	{
 		for (IModel<T> model : models)
 		{
-			model.detach();
+			if (model instanceof IDetachable)
+			{
+				((IDetachable)model).detach();
+			}
 		}
 	}
 
@@ -113,7 +117,10 @@ public class ProviderSubset<T> implements Set<T>, IDetachable
 
 		boolean contains = models.contains(model);
 
-		model.detach();
+		if (model instanceof IDetachable)
+		{
+			((IDetachable)model).detach();
+		}
 
 		return contains;
 	}
@@ -131,7 +138,10 @@ public class ProviderSubset<T> implements Set<T>, IDetachable
 
 		boolean removed = models.remove(model);
 
-		model.detach();
+		if (model instanceof IDetachable)
+		{
+			((IDetachable)model).detach();
+		}
 
 		return removed;
 	}
@@ -165,7 +175,10 @@ public class ProviderSubset<T> implements Set<T>, IDetachable
 			{
 				iterator.remove();
 
-				current.detach();
+				if (current instanceof IDetachable)
+				{
+					((IDetachable)current).detach();
+				}
 				current = null;
 			}
 		};
@@ -241,21 +254,20 @@ public class ProviderSubset<T> implements Set<T>, IDetachable
 	 */
 	public IModel<Set<T>> createModel()
 	{
-		return new IModel<Set<T>>()
+		return new Wrapper();
+	}
+
+	class Wrapper implements IModel<Set<T>>, IDetachable{
+		@Override
+		public Set<T> getObject()
 		{
-			private static final long serialVersionUID = 1L;
+			return ProviderSubset.this;
+		}
 
-			@Override
-			public Set<T> getObject()
-			{
-				return ProviderSubset.this;
-			}
-
-			@Override
-			public void detach()
-			{
-				ProviderSubset.this.detach();
-			}
-		};
+		@Override
+		public void detach()
+		{
+			ProviderSubset.this.detach();
+		}
 	}
 }

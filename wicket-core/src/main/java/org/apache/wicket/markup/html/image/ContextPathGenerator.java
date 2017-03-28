@@ -19,6 +19,7 @@ package org.apache.wicket.markup.html.image;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.UrlUtils;
@@ -75,7 +76,10 @@ public class ContextPathGenerator extends Behavior
 	@Override
 	public void detach(Component component)
 	{
-		contextRelativePath.detach();
+		if (contextRelativePath instanceof IDetachable)
+		{
+			((IDetachable)contextRelativePath).detach();
+		}
 		super.detach(component);
 	}
 

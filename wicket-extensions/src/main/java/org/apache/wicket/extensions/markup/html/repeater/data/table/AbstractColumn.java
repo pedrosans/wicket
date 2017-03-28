@@ -18,6 +18,7 @@ package org.apache.wicket.extensions.markup.html.repeater.data.table;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -81,9 +82,9 @@ public abstract class AbstractColumn<T, S> implements IStyledColumn<T, S>
 	@Override
 	public void detach()
 	{
-		if (displayModel != null)
+		if (displayModel instanceof IDetachable)
 		{
-			displayModel.detach();
+			((IDetachable)displayModel).detach();
 		}
 	}
 

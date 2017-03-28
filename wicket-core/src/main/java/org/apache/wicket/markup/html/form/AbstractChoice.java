@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.convert.IConverter;
@@ -315,9 +316,9 @@ public abstract class AbstractChoice<T, E> extends FormComponent<T>
 	{
 		super.detachModel();
 
-		if (choices != null)
+		if (choices instanceof IDetachable)
 		{
-			choices.detach();
+			((IDetachable)choices).detach();
 		}
 	}
 

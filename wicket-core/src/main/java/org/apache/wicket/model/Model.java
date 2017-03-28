@@ -42,7 +42,7 @@ import org.apache.wicket.util.lang.Objects;
  * @param <T>
  *            The type of the Model Object
  */
-public class Model<T extends Serializable> implements IObjectClassAwareModel<T>
+public class Model<T extends Serializable> implements IObjectClassAwareModel<T>, IDetachable
 {
 	private static final long serialVersionUID = 1L;
 

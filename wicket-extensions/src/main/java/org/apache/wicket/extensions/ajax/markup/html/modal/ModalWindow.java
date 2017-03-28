@@ -16,7 +16,6 @@
  */
 package org.apache.wicket.extensions.ajax.markup.html.modal;
 
-import com.github.openjson.JSONObject;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.WicketRuntimeException;
@@ -33,6 +32,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.AbstractRepeater;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestHandler;
@@ -44,6 +44,8 @@ import org.apache.wicket.resource.CoreLibrariesContributor;
 import org.apache.wicket.util.io.IClusterable;
 import org.apache.wicket.util.lang.EnumeratedType;
 import org.apache.wicket.util.string.AppendingStringBuffer;
+
+import com.github.openjson.JSONObject;
 
 /**
  * Modal window component.
@@ -1137,9 +1139,9 @@ public class ModalWindow extends Panel
 	{
 		super.onDetach();
 
-		if (title != null)
+		if(title instanceof IDetachable)
 		{
-			title.detach();
+			((IDetachable)title).detach();
 		}
 	}
 

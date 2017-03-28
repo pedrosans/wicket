@@ -69,26 +69,29 @@ public class ResourceModelTest extends WicketTestCase
 	@Test
 	public void detaching()
 	{
-
-		final boolean[] detached = { false };
-
-		ResourceModel model = new ResourceModel("testlabel")
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void detach()
-			{
-				super.detach();
-
-				detached[0] = true;
-			}
-		};
+		DetachableResourceModel model = new DetachableResourceModel("testlabel");
 
 		IModel<String> wrapped = model.wrapOnAssignment(new TestPage());
 		wrapped.getObject();
-		wrapped.detach();
+		((IDetachable)wrapped).detach();
 
-		assertTrue(null, detached[0]);
+		assertTrue(null, model.detached[0]);
+	}
+
+	class DetachableResourceModel extends ResourceModel implements IDetachable{
+		private static final long serialVersionUID = 1L;
+		final boolean[] detached = { false };
+
+		public DetachableResourceModel(String resourceKey)
+		{
+			super(resourceKey);
+		}
+
+		@Override
+		public void detach()
+		{
+			detached[0] = true;
+		}
+		
 	}
 }

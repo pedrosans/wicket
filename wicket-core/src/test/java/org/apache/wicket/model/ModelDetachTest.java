@@ -45,7 +45,7 @@ public class ModelDetachTest extends Assert
 	public void compoundPropertyModelDetach()
 	{
 		Detachable detachable = new Detachable();
-		IModel<Detachable> model = new CompoundPropertyModel<Detachable>(detachable);
+		CompoundPropertyModel<Detachable> model = new CompoundPropertyModel<Detachable>(detachable);
 		model.detach();
 		assertTrue(detachable.detached);
 	}
@@ -57,7 +57,7 @@ public class ModelDetachTest extends Assert
 	public void boundCompoundPropertyModelDetach()
 	{
 		Detachable detachable = new Detachable();
-		IModel<Detachable> model = new CompoundPropertyModel<Detachable>(detachable);
+		CompoundPropertyModel<Detachable> model = new CompoundPropertyModel<Detachable>(detachable);
 		model.detach();
 		assertTrue(detachable.detached);
 	}
@@ -69,7 +69,7 @@ public class ModelDetachTest extends Assert
 	public void abstractPropertyModelDetach()
 	{
 		Detachable detachable = new Detachable();
-		IModel<?> model = new AbstractPropertyModel<Void>(detachable)
+		AbstractPropertyModel<Void> model = new AbstractPropertyModel<Void>(detachable)
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -90,7 +90,7 @@ public class ModelDetachTest extends Assert
 	public void propertyModelDetach()
 	{
 		Detachable detachable = new Detachable();
-		IModel<?> model = new PropertyModel<Void>(detachable, "foo");
+		PropertyModel<Void> model = new PropertyModel<Void>(detachable, "foo");
 		model.detach();
 		assertTrue(detachable.detached);
 	}

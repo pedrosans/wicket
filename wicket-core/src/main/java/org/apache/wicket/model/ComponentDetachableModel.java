@@ -165,7 +165,10 @@ public class ComponentDetachableModel<T> implements IComponentAssignedModel<T>
 			if (attached)
 			{
 				attached = false;
-				ComponentDetachableModel.this.detach();
+				if(ComponentDetachableModel.this instanceof IDetachable)
+				{
+					((IDetachable)ComponentDetachableModel.this).detach();
+				}
 			}
 		}
 	}

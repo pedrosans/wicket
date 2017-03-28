@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
@@ -320,9 +321,9 @@ public class AjaxEditableChoiceLabel<T> extends AjaxEditableLabel<T>
 	@Override
 	protected void onDetach()
 	{
-		if (choices != null)
+		if (choices instanceof IDetachable)
 		{
-			choices.detach();
+			((IDetachable)choices).detach();
 		}
 		super.onDetach();
 	}

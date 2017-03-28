@@ -127,7 +127,10 @@ public class ResourceModel implements IComponentAssignedModel<String>
 		@Override
 		protected void onDetach()
 		{
-			ResourceModel.this.detach();
+			if(ResourceModel.this instanceof IDetachable)
+			{
+				((IDetachable)ResourceModel.this).detach();
+			}
 		}
 
 	}

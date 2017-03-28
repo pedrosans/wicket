@@ -35,6 +35,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
@@ -669,7 +670,10 @@ public class Palette<T> extends FormComponentPanel<Collection<T>>
 		// we need to manually detach the choices model since it is not attached
 		// to a component
 		// an alternative might be to attach it to one of the subcomponents
-		choicesModel.detach();
+		if(choicesModel instanceof IDetachable)
+		{
+			((IDetachable)choicesModel).detach();
+		}
 
 		super.onDetach();
 	}

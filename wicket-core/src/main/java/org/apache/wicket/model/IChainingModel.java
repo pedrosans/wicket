@@ -39,7 +39,7 @@ package org.apache.wicket.model;
  * @deprecated This class is not used by the framework anymore. Will be removed in Wicket 9.0.0
  */
 @Deprecated
-public interface IChainingModel<T> extends IModel<T>
+public interface IChainingModel<T> extends IModel<T>, IDetachable
 {
 	/**
 	 * Sets the model that is chained inside this model.

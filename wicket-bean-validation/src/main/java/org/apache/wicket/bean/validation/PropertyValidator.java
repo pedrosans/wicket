@@ -17,6 +17,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidatable;
@@ -178,9 +179,9 @@ public class PropertyValidator<T> extends Behavior implements IValidator<T>
 	public void detach(Component component)
 	{
 		super.detach(component);
-		if (groups_ != null)
+		if(groups_ instanceof IDetachable)
 		{
-			groups_.detach();
+			((IDetachable)groups_).detach();
 		}
 	}
 

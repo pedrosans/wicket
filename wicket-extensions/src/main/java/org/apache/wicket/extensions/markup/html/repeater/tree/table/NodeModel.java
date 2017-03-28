@@ -19,6 +19,7 @@ package org.apache.wicket.extensions.markup.html.repeater.tree.table;
 import java.util.Arrays;
 
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
 
@@ -81,7 +82,10 @@ public class NodeModel<T> implements IWrapModel<T>
 	@Override
 	public void detach()
 	{
-		model.detach();
+		if(model instanceof IDetachable)
+		{
+			((IDetachable)model).detach();
+		}
 	}
 
 	public int getDepth()

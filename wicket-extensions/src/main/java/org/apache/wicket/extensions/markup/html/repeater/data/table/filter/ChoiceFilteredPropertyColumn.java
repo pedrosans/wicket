@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -77,9 +78,9 @@ public class ChoiceFilteredPropertyColumn<T, Y, S> extends FilteredPropertyColum
 	public void detach()
 	{
 		super.detach();
-		if (filterChoices != null)
+		if (filterChoices instanceof IDetachable)
 		{
-			filterChoices.detach();
+			((IDetachable)filterChoices).detach();
 		}
 	}
 

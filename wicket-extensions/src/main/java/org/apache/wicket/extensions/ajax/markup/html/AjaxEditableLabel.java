@@ -36,8 +36,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IObjectClassAwareModel;
+import org.apache.wicket.model.IWrapModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidator;
@@ -548,7 +550,7 @@ public class AjaxEditableLabel<T> extends Panel implements IGenericComponent<T, 
 	 * Model that accesses the parent model lazily. this is required since we eventually request the
 	 * parents model before the component is added to the parent.
 	 */
-	private class WrapperModel implements IModel<T>, IObjectClassAwareModel<T>
+	private class WrapperModel implements IWrapModel<T>, IObjectClassAwareModel<T>
 	{
 		@Override
 		public T getObject()
@@ -563,9 +565,19 @@ public class AjaxEditableLabel<T> extends Panel implements IGenericComponent<T, 
 		}
 
 		@Override
+		public IModel<?> getWrappedModel()
+		{
+			return getParentModel();
+		}
+
+		@Override
 		public void detach()
 		{
-			getParentModel().detach();
+			IModel<?> parentModel = getParentModel();
+			if(parentModel instanceof IDetachable)
+			{
+				((IDetachable)parentModel).detach();
+			}
 		}
 
 		@Override

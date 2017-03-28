@@ -32,7 +32,7 @@ import org.apache.wicket.util.lang.Objects;
  * @param <T>
  *            type of model object
  */
-public abstract class GenericBaseModel<T> implements IObjectClassAwareModel<T>
+public abstract class GenericBaseModel<T> implements IObjectClassAwareModel<T>, IDetachable
 {
 	private static final long serialVersionUID = 1L;
 	/** model object */

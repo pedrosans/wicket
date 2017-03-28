@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.junit.Assert;
 import org.junit.Test;
@@ -74,7 +75,7 @@ public class ProviderSubsetTest extends Assert
 		assertTrue(subset.contains("AA"));
 		assertTrue(subset.contains("AAA"));
 
-		subset.createModel().detach();
+		((IDetachable)subset.createModel()).detach();
 
 		for (StringModel model : models)
 		{
@@ -86,7 +87,7 @@ public class ProviderSubsetTest extends Assert
 		assertTrue(subset.contains("AAA"));
 	}
 
-	private class StringModel implements IModel<String>
+	private class StringModel implements IModel<String>, IDetachable
 	{
 
 		private static final long serialVersionUID = 1L;

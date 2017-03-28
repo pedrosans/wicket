@@ -19,6 +19,7 @@ package org.apache.wicket.markup.html.link;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -132,9 +133,9 @@ public abstract class AbstractLink extends WebMarkupContainer
 	{
 		super.onDetach();
 
-		if (bodyModel != null)
+		if (bodyModel instanceof IDetachable)
 		{
-			bodyModel.detach();
+			((IDetachable)bodyModel).detach();
 		}
 	}
 }

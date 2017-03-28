@@ -51,6 +51,10 @@ public abstract class AbstractWrapModel<T> implements IWrapModel<T>
 	@Override
 	public void detach()
 	{
-		getWrappedModel().detach();
+		IModel<?> wrapped = getWrappedModel();
+		if(wrapped instanceof IDetachable)
+		{
+			((IDetachable)wrapped).detach();
+		}
 	}
 }

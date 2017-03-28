@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -414,13 +415,13 @@ public class WizardStep extends Panel implements IWizardStep
 	protected void detachModel()
 	{
 		super.detachModel();
-		if (title != null)
+		if(title instanceof IDetachable)
 		{
-			title.detach();
+			((IDetachable)title).detach();
 		}
-		if (summary != null)
+		if(summary instanceof IDetachable)
 		{
-			summary.detach();
+			((IDetachable)summary).detach();
 		}
 	}
 

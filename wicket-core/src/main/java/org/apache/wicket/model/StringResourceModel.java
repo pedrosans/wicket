@@ -623,9 +623,9 @@ public class StringResourceModel extends LoadableDetachableModel<String>
 		super.detach();
 
 		// detach any model
-		if (model != null)
+		if(model instanceof IDetachable)
 		{
-			model.detach();
+			((IDetachable)model).detach();
 		}
 
 		// some parameters can be detachable
@@ -640,9 +640,9 @@ public class StringResourceModel extends LoadableDetachableModel<String>
 			}
 		}
 
-		if (defaultValue != null)
+		if(defaultValue instanceof IDetachable)
 		{
-			defaultValue.detach();
+			((IDetachable)defaultValue).detach();
 		}
 	}
 

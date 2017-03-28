@@ -91,11 +91,6 @@ public class SessionSizeDebugPanel extends StandardDebugPanel
 				return "Session: " + sessionSizeAsString;
 			}
 
-			@Override
-			public void detach()
-			{
-				size.detach();
-			}
 		};
 	}
 

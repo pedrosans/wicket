@@ -20,7 +20,9 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.extensions.markup.html.repeater.data.table.export.IExportableColumn;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.IWrapModel;
 import org.apache.wicket.util.lang.Args;
 import org.danekja.java.util.function.serializable.SerializableFunction;
 
@@ -95,7 +97,7 @@ public class LambdaColumn<T, S> extends AbstractColumn<T, S> implements IExporta
 	@Override
 	public IModel<?> getDataModel(IModel<T> rowModel)
 	{
-		IModel<Object> dataModel = new IModel<Object>()
+		IModel<Object> dataModel = new IWrapModel<Object>()
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -110,11 +112,20 @@ public class LambdaColumn<T, S> extends AbstractColumn<T, S> implements IExporta
 					return function.apply(before);
 				}
 			}
-			
+
+			@Override
+			public IModel<?> getWrappedModel()
+			{
+				return rowModel;
+			}
+
 			@Override
 			public void detach()
 			{
-				rowModel.detach();
+				if (rowModel instanceof IDetachable)
+				{
+					((IDetachable)rowModel).detach();
+				}
 			}
 		};
 		return dataModel;

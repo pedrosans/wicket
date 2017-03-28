@@ -31,6 +31,7 @@ import org.apache.wicket.markup.repeater.IItemReuseStrategy;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.visit.IVisit;
@@ -201,7 +202,10 @@ public abstract class TableTree<T, S> extends AbstractTree<T>
 				visit.dontGoDeeper();
 			}
 		});
-		model.detach();
+		if(model instanceof IDetachable)
+		{
+			((IDetachable)model).detach();
+		}
 	}
 
 	/**

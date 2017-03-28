@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.image.Image.Cors;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -330,9 +331,9 @@ public class ExternalImage extends WebComponent
 	@Override
 	protected void onDetach()
 	{
-		if (srcSetModel != null)
+		if (srcSetModel instanceof IDetachable)
 		{
-			srcSetModel.detach();
+			((IDetachable)srcSetModel).detach();
 		}
 		super.onDetach();
 	}

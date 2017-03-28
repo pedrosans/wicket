@@ -20,6 +20,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -51,7 +52,7 @@ public class TestDetachPage extends WebPage
 	 * 
 	 * @author dashorst
 	 */
-	private class DetachModel implements IModel<String>
+	private class DetachModel implements IModel<String>, IDetachable
 	{
 		/** for serialization. */
 		private static final long serialVersionUID = 1L;

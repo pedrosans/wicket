@@ -18,6 +18,7 @@ package org.apache.wicket.markup.html.link;
 
 import java.io.File;
 
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestCycle;
@@ -142,9 +143,9 @@ public class DownloadLink extends Link<File>
 	{
 		super.detachModels();
 
-		if (fileNameModel != null)
+		if (fileNameModel instanceof IDetachable)
 		{
-			fileNameModel.detach();
+			((IDetachable)fileNameModel).detach();
 		}
 	}
 

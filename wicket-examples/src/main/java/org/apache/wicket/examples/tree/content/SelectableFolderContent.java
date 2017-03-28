@@ -24,6 +24,7 @@ import org.apache.wicket.examples.tree.Foo;
 import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.content.Folder;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -46,9 +47,9 @@ public class SelectableFolderContent extends Content
 	@Override
 	public void detach()
 	{
-		if (selected != null)
+		if(selected instanceof IDetachable)
 		{
-			selected.detach();
+			((IDetachable)selected).detach();
 		}
 	}
 
@@ -62,7 +63,10 @@ public class SelectableFolderContent extends Content
 		}
 		finally
 		{
-			model.detach();
+			if(model instanceof IDetachable)
+			{
+				((IDetachable)model).detach();
+			}
 		}
 	}
 
@@ -72,7 +76,10 @@ public class SelectableFolderContent extends Content
 		{
 			targetOptional.ifPresent(target -> tree.updateNode(selected.getObject(), target));
 
-			selected.detach();
+			if(selected instanceof IDetachable)
+			{
+				((IDetachable)selected).detach();
+			}
 			selected = null;
 		}
 

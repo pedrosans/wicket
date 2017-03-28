@@ -17,6 +17,7 @@
 package org.apache.wicket.markup.html.form;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
 
@@ -44,13 +45,9 @@ public abstract class LabeledWebMarkupContainer extends WebMarkupContainer
 	protected void onDetach()
 	{
 		super.onDetach();
-		if (labelModel != null)
+		if (labelModel instanceof IDetachable)
 		{
-			labelModel.detach();
-			if (labelModel instanceof IWrapModel)
-			{
-				((IWrapModel<?>)labelModel).getWrappedModel().detach();
-			}
+			((IDetachable)labelModel).detach();
 		}
 	}
 

@@ -136,8 +136,8 @@ public class AttributeModifier extends Behavior implements IClusterable
 	@Override
 	public final void detach(Component component)
 	{
-		if (replaceModel != null)
-			replaceModel.detach();
+		if (replaceModel instanceof IDetachable)
+			((IDetachable)replaceModel).detach();
 	}
 
 	/**

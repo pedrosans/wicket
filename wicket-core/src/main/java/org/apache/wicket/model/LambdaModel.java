@@ -140,7 +140,7 @@ public abstract class LambdaModel<T> implements IModel<T>
 		Args.notNull(target, "target");
 		Args.notNull(getter, "getter");
 
-		return new LambdaModel<T>()
+		return new IWrapModel<T>()
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -156,9 +156,18 @@ public abstract class LambdaModel<T> implements IModel<T>
 			}
 
 			@Override
+			public IModel<?> getWrappedModel()
+			{
+				return target;
+			}
+
+			@Override
 			public void detach()
 			{
-				target.detach();
+				if (target instanceof IDetachable)
+				{
+					((IDetachable)target).detach();
+				}
 			}
 		};
 	}
@@ -195,7 +204,7 @@ public abstract class LambdaModel<T> implements IModel<T>
 		Args.notNull(getter, "getter");
 		Args.notNull(setter, "setter");
 
-		return new LambdaModel<T>()
+		return new IWrapModel<T>()
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -221,9 +230,18 @@ public abstract class LambdaModel<T> implements IModel<T>
 			}
 
 			@Override
+			public IModel<?> getWrappedModel()
+			{
+				return target;
+			}
+
+			@Override
 			public void detach()
 			{
-				target.detach();
+				if (target instanceof IDetachable)
+				{
+					((IDetachable)target).detach();
+				}
 			}
 		};
 	}

@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -147,7 +148,10 @@ public class TextTemplateResourceReference extends ResourceReference implements 
 			{
 				IModel<Map<String, Object>> variables = TextTemplateResourceReference.this.variablesModel;
 				String stringValue = textTemplate.asString(variables.getObject());
-				variables.detach(); // We're done with the model so detach it!
+				if(variables instanceof IDetachable)
+				{
+					((IDetachable)variables).detach(); // We're done with the model so detach it!
+				}
 
 				StringResourceStream resourceStream = new StringResourceStream(stringValue,
 						textTemplate.getContentType());

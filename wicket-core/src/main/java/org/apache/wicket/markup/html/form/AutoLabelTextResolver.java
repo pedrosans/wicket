@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.form.AutoLabelResolver.AutoLabel;
 import org.apache.wicket.markup.html.internal.ResponseBufferZone;
 import org.apache.wicket.markup.parser.XmlTag;
 import org.apache.wicket.markup.resolver.IComponentResolver;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -148,7 +149,10 @@ public class AutoLabelTextResolver implements IComponentResolver
 				else
 				{
 					// if we can't hand off the labelmodel to a component, we have to detach it
-					labelModel.detach();
+					if(labelModel instanceof IDetachable)
+					{
+						((IDetachable)labelModel).detach();
+					}
 				}
 			}
 		}

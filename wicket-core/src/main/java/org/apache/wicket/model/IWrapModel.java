@@ -30,7 +30,7 @@ package org.apache.wicket.model;
  * @param <T>
  *            The model object type
  */
-public interface IWrapModel<T> extends IModel<T>
+public interface IWrapModel<T> extends IModel<T>, IDetachable
 {
 	/**
 	 * Gets the wrapped model.

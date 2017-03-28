@@ -23,6 +23,7 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.wicket.core.util.lang.WicketObjects;
 import org.apache.wicket.model.lambda.Person;
+import org.apache.wicket.util.io.IClusterable;
 import org.junit.Test;
 
 /**
@@ -92,7 +93,7 @@ public class LambdaModelTest
 	private void serialize(IModel<String> personNameModel, String personName)
 	{
 		final IModel<String> clone = WicketObjects.cloneObject(personNameModel);
-		assertThat(clone, is(instanceOf(LambdaModel.class)));
+		assertThat(clone, is(instanceOf(IClusterable.class)));
 		assertThat(clone.getObject(), is(personName));
 	}
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.wicket.markup.html.form;
 
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.tester.WicketTestCase;
 import org.junit.Test;
@@ -66,7 +67,7 @@ public class PasswordTextFieldTest extends WicketTestCase
 		assertTrue(model.detached);
 	}
 
-	private class TestModel implements IModel<String>
+	private class TestModel implements IModel<String>, IDetachable
 	{
 		public boolean detached;
 

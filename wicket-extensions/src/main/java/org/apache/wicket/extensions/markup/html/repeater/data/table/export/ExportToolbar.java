@@ -31,6 +31,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.IResource;
@@ -255,8 +256,14 @@ public class ExportToolbar extends AbstractToolbar
 	@Override
 	protected void onDetach()
 	{
-		fileNameModel.detach();
-		messageModel.detach();
+		if (fileNameModel instanceof IDetachable)
+		{
+			((IDetachable)fileNameModel).detach();
+		}
+		if (messageModel instanceof IDetachable)
+		{
+			((IDetachable)messageModel).detach();
+		}
 		super.onDetach();
 	}
 

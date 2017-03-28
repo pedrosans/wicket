@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  * @param <T>
  *            The Model Object type
  */
-public abstract class LoadableDetachableModel<T> implements IModel<T>
+public abstract class LoadableDetachableModel<T> implements IModel<T>, IDetachable
 {
 	private static final long serialVersionUID = 1L;
 

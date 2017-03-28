@@ -63,6 +63,7 @@ import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IComponentAssignedModel;
 import org.apache.wicket.model.IComponentInheritedModel;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IModelComparator;
 import org.apache.wicket.model.IWrapModel;
@@ -3022,9 +3023,9 @@ public abstract class Component
 		if (wrappedModel != model)
 		{
 			// Detach the old/current model
-			if (prevModel != null)
+			if (prevModel instanceof IDetachable)
 			{
-				prevModel.detach();
+				((IDetachable)prevModel).detach();
 			}
 
 			modelChanging();
@@ -3657,15 +3658,18 @@ public abstract class Component
 	protected void detachModel()
 	{
 		IModel<?> model = getModelImpl();
-		if (model != null)
+		if (model instanceof IDetachable)
 		{
-			model.detach();
+			((IDetachable)model).detach();
 		}
 		// also detach the wrapped model of a component assigned wrap (not
 		// inherited)
 		if (model instanceof IWrapModel && !getFlag(FLAG_INHERITABLE_MODEL))
 		{
-			((IWrapModel<?>)model).getWrappedModel().detach();
+			IModel<?> wrapped = ((IWrapModel<?>)model).getWrappedModel();
+			if(wrapped instanceof IDetachable){
+				((IDetachable)wrapped).detach();
+			}
 		}
 	}
 

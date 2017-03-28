@@ -270,7 +270,7 @@ public class StringResourceModelTest extends WicketTestCase
 		assertFalse(wrappedModel.isAttached());
 	}
 
-	private static class Wicket5176Model implements IModel {
+	private static class Wicket5176Model implements IModel, IDetachable {
 		private boolean attached = true;
 
 		@Override
