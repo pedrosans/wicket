@@ -25,6 +25,7 @@ import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.object.ObjectCycle;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 import org.apache.wicket.util.string.Strings;
 
@@ -316,10 +317,7 @@ public abstract class AbstractChoice<T, E> extends FormComponent<T>
 	{
 		super.detachModel();
 
-		if (choices instanceof IDetachable)
-		{
-			((IDetachable)choices).detach();
-		}
+		ObjectCycle.detach(choices);
 	}
 
 	/**

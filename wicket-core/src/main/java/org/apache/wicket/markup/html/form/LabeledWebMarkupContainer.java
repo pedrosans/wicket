@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
+import org.apache.wicket.util.object.ObjectCycle;
 
 /**
  * Default implementation of {@link ILabelProvider}.
@@ -45,10 +46,7 @@ public abstract class LabeledWebMarkupContainer extends WebMarkupContainer
 	protected void onDetach()
 	{
 		super.onDetach();
-		if (labelModel instanceof IDetachable)
-		{
-			((IDetachable)labelModel).detach();
-		}
+		ObjectCycle.detach(labelModel);
 	}
 
 	/**

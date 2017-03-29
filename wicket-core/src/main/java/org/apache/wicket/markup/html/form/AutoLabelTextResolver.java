@@ -34,6 +34,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.util.object.ObjectCycle;
 import org.apache.wicket.util.string.Strings;
 
 /**
@@ -149,10 +150,7 @@ public class AutoLabelTextResolver implements IComponentResolver
 				else
 				{
 					// if we can't hand off the labelmodel to a component, we have to detach it
-					if(labelModel instanceof IDetachable)
-					{
-						((IDetachable)labelModel).detach();
-					}
+					ObjectCycle.detach(labelModel);
 				}
 			}
 		}

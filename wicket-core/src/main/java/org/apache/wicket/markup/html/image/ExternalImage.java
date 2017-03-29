@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.image.Image.Cors;
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.object.ObjectCycle;
 
 /**
  * A component to display external images. The src / srcSet information are hold in models
@@ -331,10 +332,7 @@ public class ExternalImage extends WebComponent
 	@Override
 	protected void onDetach()
 	{
-		if (srcSetModel instanceof IDetachable)
-		{
-			((IDetachable)srcSetModel).detach();
-		}
+		ObjectCycle.detach(srcSetModel);
 		super.onDetach();
 	}
 }

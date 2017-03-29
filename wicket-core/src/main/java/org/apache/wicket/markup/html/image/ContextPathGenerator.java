@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.UrlUtils;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.util.object.ObjectCycle;
 
 /**
  * A behavior that converts the provider url fragment to a context-relative url. For example if the
@@ -76,10 +77,7 @@ public class ContextPathGenerator extends Behavior
 	@Override
 	public void detach(Component component)
 	{
-		if (contextRelativePath instanceof IDetachable)
-		{
-			((IDetachable)contextRelativePath).detach();
-		}
+		ObjectCycle.detach(contextRelativePath);
 		super.detach(component);
 	}
 
