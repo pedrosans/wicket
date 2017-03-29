@@ -84,6 +84,7 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.io.IClusterable;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.lang.Classes;
+import org.apache.wicket.util.object.ObjectCycle;
 import org.apache.wicket.util.string.PrependingStringBuffer;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.value.ValueMap;
@@ -4613,5 +4614,22 @@ public abstract class Component
 	protected void onReAdd()
 	{
 		setRequestFlag(RFLAG_ON_RE_ADD_SUPER_CALL_VERIFIED, true);
+	}
+
+	public void bindLifecycle(final Object managed)
+	{
+		manageLifecycle(managed);
+	}
+
+	public void manageLifecycle(final Object managed)
+	{
+		add(new Behavior()
+		{
+			@Override
+			public void detach(Component component)
+			{
+				ObjectCycle.detach(managed);
+			}
+		});
 	}
 }

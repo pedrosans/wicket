@@ -136,17 +136,7 @@ public class DownloadLink extends Link<File>
 	{
 		super(id, fileModel);
 		this.fileNameModel = wrap(fileNameModel);
-	}
-
-	@Override
-	public void detachModels()
-	{
-		super.detachModels();
-
-		if (fileNameModel instanceof IDetachable)
-		{
-			((IDetachable)fileNameModel).detach();
-		}
+		manageLifecycle(fileNameModel);
 	}
 
 	@Override
