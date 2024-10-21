@@ -37,6 +37,8 @@ public class CdiConfiguration
 
 	private IConversationPropagation propagation = ConversationPropagation.NONBOOKMARKABLE;
 
+	private BeanManager beanManager;
+
 	private BeanManager fallbackBeanManager;
 
 	/**
@@ -54,6 +56,29 @@ public class CdiConfiguration
 	public CdiConfiguration setPropagation(IConversationPropagation propagation)
 	{
 		this.propagation = propagation;
+		return this;
+	}
+
+	public BeanManager getBeanManager()
+	{
+		return beanManager;
+	}
+
+	/**
+	 * Sets a BeanManager that should be used at first.
+	 * 
+	 * @param beanManager
+	 * @return this instance
+	 */
+	public CdiConfiguration setBeanManager(BeanManager beanManager)
+	{
+		CdiConfiguration cdiConfiguration = CdiConfiguration.get(Application.get());
+
+		if (cdiConfiguration != null)
+			throw new IllegalStateException(
+				"A CdiConfiguration is already set for the application.");
+
+		this.beanManager = beanManager;
 		return this;
 	}
 
