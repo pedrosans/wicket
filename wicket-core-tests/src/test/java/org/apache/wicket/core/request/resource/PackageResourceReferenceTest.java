@@ -16,23 +16,6 @@
  */
 package org.apache.wicket.core.request.resource;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Locale;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ThreadContext;
@@ -40,28 +23,39 @@ import org.apache.wicket.core.util.resource.UrlResourceStream;
 import org.apache.wicket.core.util.resource.locator.IResourceStreamLocator;
 import org.apache.wicket.core.util.resource.locator.caching.CachingResourceStreamLocator;
 import org.apache.wicket.markup.IMarkupResourceStreamProvider;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.mock.MockHttpServletRequest;
 import org.apache.wicket.protocol.http.mock.MockHttpServletResponse;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.AbstractResource.ContentRangeType;
-import org.apache.wicket.request.resource.CssPackageResource;
-import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.*;
 import org.apache.wicket.request.resource.IResource.Attributes;
-import org.apache.wicket.request.resource.JavaScriptPackageResource;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.PackageResource;
-import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.ResourceReference.UrlAttributes;
 import org.apache.wicket.response.ByteArrayResponse;
 import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.util.tester.WicketTestCase;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Pedro Santos
@@ -85,7 +79,7 @@ class PackageResourceReferenceTest extends WicketTestCase
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	@Test
 	void resourceResolution()
@@ -104,8 +98,8 @@ class PackageResourceReferenceTest extends WicketTestCase
 					assertEquals(variation, urlAttributes.getVariation());
 
 					ByteArrayResponse byteResponse = new ByteArrayResponse();
-					Attributes mockAttributes = new Attributes(tester.getRequestCycle()
-						.getRequest(), byteResponse);
+					Attributes mockAttributes = new Attributes(
+						tester.getRequestCycle().getRequest(), byteResponse);
 					reference.getResource().respond(mockAttributes);
 					String fileContent = new String(byteResponse.getBytes());
 					if (locale != null)
@@ -142,8 +136,8 @@ class PackageResourceReferenceTest extends WicketTestCase
 						"resource.txt", locale, style, variation);
 
 					ByteArrayResponse byteResponse = new ByteArrayResponse();
-					Attributes mockAttributes = new Attributes(tester.getRequestCycle()
-						.getRequest(), byteResponse);
+					Attributes mockAttributes = new Attributes(
+						tester.getRequestCycle().getRequest(), byteResponse);
 					reference.getResource().respond(mockAttributes);
 					String fileContent = new String(byteResponse.getBytes());
 					if (locale != null)
@@ -228,13 +222,15 @@ class PackageResourceReferenceTest extends WicketTestCase
 		class PRR extends PackageResourceReference
 		{
 
-			public PRR(String key) {
+			public PRR(String key)
+			{
 				super(key);
 			}
 
 			// make it public for the test
 			@Override
-			public String getMinifiedName() {
+			public String getMinifiedName()
+			{
 				return super.getMinifiedName();
 			}
 		}
@@ -260,13 +256,17 @@ class PackageResourceReferenceTest extends WicketTestCase
 	void testJavaScriptResourceReferenceRespectsMinifiedResourcesDetection()
 	{
 		Application.get().getResourceSettings().setUseMinifiedResources(true);
-		final JavaScriptResourceReference notMinified = new JavaScriptResourceReference(PackageResourceReferenceTest.class, "a.js");
+		final JavaScriptResourceReference notMinified = new JavaScriptResourceReference(
+			PackageResourceReferenceTest.class, "a.js");
 		final JavaScriptPackageResource notMinifiedResource = notMinified.getResource();
-		assertTrue(notMinifiedResource.getCompress(), "Not minified resource should got its compress flag set to true");
+		assertTrue(notMinifiedResource.getCompress(),
+			"Not minified resource should got its compress flag set to true");
 
-		final JavaScriptResourceReference alreadyMinified = new JavaScriptResourceReference(PackageResourceReferenceTest.class, "b.min.js");
+		final JavaScriptResourceReference alreadyMinified = new JavaScriptResourceReference(
+			PackageResourceReferenceTest.class, "b.min.js");
 		final JavaScriptPackageResource alreadyMinifiedResource = alreadyMinified.getResource();
-		assertFalse(alreadyMinifiedResource.getCompress(), "Already minified resource should got its compress flag set to false");
+		assertFalse(alreadyMinifiedResource.getCompress(),
+			"Already minified resource should got its compress flag set to false");
 	}
 
 	/**
@@ -276,13 +276,17 @@ class PackageResourceReferenceTest extends WicketTestCase
 	void testCSSResourceReferenceRespectsMinifiedResourcesDetection()
 	{
 		Application.get().getResourceSettings().setUseMinifiedResources(true);
-		final CssResourceReference notMinified = new CssResourceReference(PackageResourceReferenceTest.class, "a.css");
+		final CssResourceReference notMinified = new CssResourceReference(
+			PackageResourceReferenceTest.class, "a.css");
 		final CssPackageResource notMinifiedResource = notMinified.getResource();
-		assertTrue(notMinifiedResource.getCompress(), "Not minified resource should got its compress flag set to true");
+		assertTrue(notMinifiedResource.getCompress(),
+			"Not minified resource should got its compress flag set to true");
 
-		final CssResourceReference alreadyMinified = new CssResourceReference(PackageResourceReferenceTest.class, "b.min.css");
+		final CssResourceReference alreadyMinified = new CssResourceReference(
+			PackageResourceReferenceTest.class, "b.min.css");
 		final CssPackageResource alreadyMinifiedResource = alreadyMinified.getResource();
-		assertFalse(alreadyMinifiedResource.getCompress(), "Already minified resource should got its compress flag set to false");
+		assertFalse(alreadyMinifiedResource.getCompress(),
+			"Already minified resource should got its compress flag set to false");
 	}
 
 	/**
@@ -326,7 +330,8 @@ class PackageResourceReferenceTest extends WicketTestCase
 		InputStream resourceAsStream = null;
 		try
 		{
-			resourceAsStream = PackageResourceReferenceTest.class.getResourceAsStream("resource_gt_4096.txt");
+			resourceAsStream = PackageResourceReferenceTest.class.getResourceAsStream(
+				"resource_gt_4096.txt");
 			String content = new String(IOUtils.toByteArray(resourceAsStream));
 
 			// Check buffer comprehensive range request
@@ -403,7 +408,7 @@ class PackageResourceReferenceTest extends WicketTestCase
 		ThreadContext.setRequestCycle(null);
 
 		PackageResourceReference reference = new PackageResourceReference(scope, "resource.txt",
-				locales[1], styles[1], variations[1]);
+			locales[1], styles[1], variations[1]);
 
 		PackageResource resource = reference.getResource();
 		assertNotNull(resource);
@@ -433,7 +438,7 @@ class PackageResourceReferenceTest extends WicketTestCase
 	}
 
 	@Test
-	public void decodeStyleFromUrl()
+	public void getStyleFromUrl()
 	{
 		tester.getSession().setStyle("blue");
 		tester.executeUrl(
@@ -441,6 +446,78 @@ class PackageResourceReferenceTest extends WicketTestCase
 
 		assertThat(tester.getLastResponseAsString(), containsString("orange"));
 		assertThat(tester.getLastResponseAsString(), not(containsString("blue")));
+	}
+
+	@Test
+	public void getStyleFromSessionWhenMountedResource()
+	{
+		tester.getApplication()
+			.mountResource("/a.css", new PackageResourceReference(scope, "a.css"));
+		tester.getSession().setStyle("blue");
+
+		tester.executeUrl("a.css");
+
+		assertThat(tester.getLastResponseAsString(), containsString("blue"));
+	}
+
+	@Test
+	@Disabled
+	public void getStyleFromUrlWhenMountedResource()
+	{
+		tester.getApplication()
+			.mountResource("/a.css", new PackageResourceReference(scope, "a.css"));
+		tester.getSession().setStyle("blue");
+
+		tester.executeUrl("a.css?-orange");
+
+		assertThat(tester.getLastResponseAsString(), containsString("orange"));
+		assertThat(tester.getLastResponseAsString(), not(containsString("blue")));
+	}
+
+	@Test
+	public void getCustomReference()
+	{
+		tester.getApplication().mountResource("/a.css", TestPage.rr);
+
+		tester.executeUrl("a.css");
+
+		assertThat(tester.getLastResponseAsString(), not(containsString("color")));
+		assertThat(TestPage.rr.resolvedIn, hasItem(tester.getLastRequest()));
+	}
+
+	@Test
+	public void getCustomReferenceWithStyleFormSession()
+	{
+		tester.getApplication().mountResource("/a.css", TestPage.rr);
+		tester.getSession().setStyle("blue");
+
+		tester.executeUrl("a.css");
+
+		assertThat(tester.getLastResponseAsString(), containsString("blue"));
+		assertThat(TestPage.rr.resolvedIn, hasItem(tester.getLastRequest()));
+	}
+
+	@Test
+	public void getResourceReferenceContributedInPage()
+	{
+		tester.startPage(TestPage.class);
+		tester.executeUrl(
+			"wicket/resource/org.apache.wicket.core.request.resource.PackageResourceReferenceTest/a.css");
+
+		assertThat(tester.getLastResponseAsString(), not(containsString("color")));
+		assertThat(TestPage.rr.resolvedIn, hasItem(tester.getLastRequest()));
+	}
+
+	@Test
+	@Disabled
+	public void getResourceReferenceContributedInPageWithStyleFromUrl()
+	{
+		tester.startPage(TestPage.class);
+		tester.executeUrl(
+			"wicket/resource/org.apache.wicket.core.request.resource.PackageResourceReferenceTest/a.css?-orange");
+
+		assertThat(tester.getLastResponseAsString(), containsString("orange"));
+		assertThat(TestPage.rr.resolvedIn, hasItem(tester.getLastRequest()));
 	}
 
 	@Test
@@ -516,16 +593,28 @@ class PackageResourceReferenceTest extends WicketTestCase
 		assertThat(page.resource.getStyle(), not(is("1.0")));
 	}
 
+	@AfterEach
+	public void after()
+	{
+		TestPage.rr.resolvedIn.clear();
+	}
+
 	public static class TestPage extends WebPage implements IMarkupResourceStreamProvider
 	{
-		CssPackageResource resource;
+		static TestResourceReference rr = new TestResourceReference(scope, "a.css");
+		PackageResource resource;
 
 		@Override
 		protected void onConfigure()
 		{
 			super.onConfigure();
-			resource = (CssPackageResource)new PackageResourceReference(scope, "a.css")
-				.getResource();
+			resource = rr.getResource();
+		}
+
+		@Override
+		public void renderHead(IHeaderResponse response)
+		{
+			response.render(CssReferenceHeaderItem.forReference(rr));
 		}
 
 		@Override
@@ -534,6 +623,24 @@ class PackageResourceReferenceTest extends WicketTestCase
 		{
 			return new StringResourceStream("<html><head></head><body></body></html>");
 		}
+	}
+
+	static class TestResourceReference extends PackageResourceReference
+	{
+		Set<Object> resolvedIn = new HashSet<Object>();
+
+		public TestResourceReference(Class<?> scope, String name)
+		{
+			super(scope, name);
+		}
+
+		@Override
+		public PackageResource getResource()
+		{
+			resolvedIn.add(RequestCycle.get().getRequest().getContainerRequest());
+			return super.getResource();
+		}
+
 	}
 
 }
