@@ -16,8 +16,13 @@
  */
 package org.apache.wicket.markup.html.link;
 
+import org.apache.wicket.MockPageWithOneComponent;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.util.tester.WicketTestCase;
 import org.junit.Test;
+
+import static org.apache.wicket.MockPageWithOneComponent.COMPONENT_ID;
+import static org.hamcrest.CoreMatchers.containsString;
 
 /**
  * Test ExternalLink (href="...")
@@ -26,11 +31,55 @@ import org.junit.Test;
  */
 public class ExternalLinkTest extends WicketTestCase
 {
+
+	@Test
+	public void allowsJavascriptScheme() throws Exception
+	{
+		String uri = "javascript:alert(1)";
+		MockPageWithOneComponent page = new MockPageWithOneComponent();
+		page.add(new ExternalLink(COMPONENT_ID, uri){
+			@Override
+			protected void onComponentTag(ComponentTag tag)
+			{
+				super.onComponentTag(tag);
+				tag.setName("a");
+			}
+		});
+
+		tester.startPage(page);
+
+		assertThat(tester.getLastResponseAsString(), containsString(uri));
+	}
+
+	@Test
+	public void allowsJavascriptSchemeInPopupTarget() throws Exception
+	{
+		String uri = "javascript:alert(1)";
+		MockPageWithOneComponent page = new MockPageWithOneComponent();
+		page.add(new ExternalLink(COMPONENT_ID, uri));
+
+		tester.startPage(page);
+
+		assertThat(tester.getLastResponseAsString(), containsString(uri));
+	}
+
+	@Test
+	public void escapesJavascriptQuotes() throws Exception
+	{
+		String unescaped = "javascript:alert('foo')";
+		MockPageWithOneComponent page = new MockPageWithOneComponent();
+		page.add(new ExternalLink(COMPONENT_ID, unescaped));
+
+		tester.startPage(page);
+
+		assertThat(tester.getLastResponseAsString(), containsString("javascript:alert(&#039;foo&#039;)"));
+	}
+
 	/**
 	 * @throws Exception
 	 */
 	@Test
-	public void renderExternalLink_1() throws Exception
+    public void renderExternalLink_1() throws Exception
 	{
 		tester.getApplication().getMarkupSettings().setAutomaticLinking(true);
 		executeTest(ExternalLinkPage_1.class, "ExternalLinkPageExpectedResult_1.html");
@@ -40,7 +89,7 @@ public class ExternalLinkTest extends WicketTestCase
 	 * @throws Exception
 	 */
 	@Test
-	public void renderExternalLink_2() throws Exception
+    public void renderExternalLink_2() throws Exception
 	{
 		tester.getApplication().getMarkupSettings().setAutomaticLinking(true);
 		executeTest(ExternalLinkPage_2.class, "ExternalLinkPageExpectedResult_2.html");
